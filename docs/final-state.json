@@ -1,0 +1,35 @@
+{
+  "example": true,
+  "system": {
+    "os": "example-os",
+    "architecture": "example-arch",
+    "timezone": "UTC"
+  },
+  "agents": [
+    {
+      "id": "demo-agent",
+      "name": "示例客户端",
+      "model": {
+        "value": "demo-model",
+        "source": "sample",
+        "confidence": "unknown"
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "id": "demo-job",
+      "title": "演示任务",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "draft",
+          "status": "pending",
+          "agent": null,
+          "attempt": 0
+        }
+      ]
+    }
+  ],
+  "measurements": []
+}

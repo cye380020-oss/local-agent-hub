@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-agent-hub"
+version = "2.1.1"
+description = "Local multi-agent cross-model orchestration workbench with HITL interactive workflow, attachments, guarded macOS desktop UI automation, parallel DAG scheduling, and automatic result collection (Python stdlib only)."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+agent-hub = "agent_hub.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["agent_hub*"]

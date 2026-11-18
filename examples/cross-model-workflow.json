@@ -1,0 +1,41 @@
+{
+  "title": "多 Agent 跨模型并行协作与独立复核示例",
+  "tasks": [
+    {
+      "id": "architecture_draft",
+      "kind": "coding",
+      "required_capabilities": ["coding", "files_read", "files_write"],
+      "allowed_tools": ["files_read", "files_write"],
+      "prompt": "在任务工作区编写 architecture.md，给出本地多 Agent 协同系统的分层设计、状态流转与故障恢复方案；最后用中文总结要点。",
+      "validation": {
+        "min_chars": 40,
+        "artifacts": [
+          {
+            "path": "architecture.md",
+            "min_bytes": 60
+          }
+        ]
+      }
+    },
+    {
+      "id": "risk_checklist",
+      "kind": "reasoning",
+      "required_capabilities": ["reasoning"],
+      "prompt": "从安全性、成本控制与跨模型独立复核三个维度，列出 5 条可检查的验收要点（必须包含“权限”“成本”“复核”三个词）。",
+      "validation": {
+        "text_contains": ["权限", "成本", "复核"]
+      }
+    },
+    {
+      "id": "cross_model_review",
+      "dependencies": ["architecture_draft", "risk_checklist"],
+      "review_of": "architecture_draft",
+      "kind": "review",
+      "required_capabilities": ["review"],
+      "prompt": "独立审校 architecture_draft 与 risk_checklist 的成果与文件预览。若满足要求仅返回 JSON {\"decision\":\"accept\",\"reason\":\"具体审查理由\"}；否则 decision 为 reject 并指出缺漏。",
+      "validation": {
+        "review_accept": true
+      }
+    }
+  ]
+}

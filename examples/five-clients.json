@@ -1,0 +1,95 @@
+{
+  "title": "五客户端交接计划（入口未接通时等待）",
+  "tasks": [
+    {
+      "id": "plan",
+      "agent": "chatgpt",
+      "kind": "reasoning",
+      "prompt": "实质分析本地多 Agent 协作项目，给出目标、证据和验收条件。",
+      "validation": {
+        "text_contains": [
+          "目标",
+          "证据",
+          "验收"
+        ]
+      }
+    },
+    {
+      "id": "implementation",
+      "agent": "codex",
+      "kind": "coding",
+      "dependencies": [
+        "plan"
+      ],
+      "prompt": "根据上一步写出本地协作的启动、暂停和恢复操作方案。",
+      "validation": {
+        "text_contains": [
+          "启动",
+          "暂停",
+          "恢复"
+        ]
+      }
+    },
+    {
+      "id": "workflow",
+      "agent": "workbuddy",
+      "kind": "general",
+      "dependencies": [
+        "plan"
+      ],
+      "prompt": "分析任务交接流程，给出交接清单和失败处理步骤。",
+      "validation": {
+        "text_contains": [
+          "交接",
+          "失败"
+        ]
+      }
+    },
+    {
+      "id": "review",
+      "agent": "deepseek",
+      "kind": "review",
+      "review_of": "implementation",
+      "dependencies": [
+        "implementation"
+      ],
+      "prompt": "独立审查上一步操作方案，返回 JSON decision accept 或 reject 和 reason 具体理由。",
+      "validation": {
+        "review_accept": true
+      }
+    },
+    {
+      "id": "writing",
+      "agent": "doubao",
+      "kind": "writing_zh",
+      "dependencies": [
+        "workflow"
+      ],
+      "prompt": "把上一步流程改写成简体中文用户说明，包含交接、失败和验收。",
+      "validation": {
+        "text_contains": [
+          "交接",
+          "失败",
+          "验收"
+        ]
+      }
+    },
+    {
+      "id": "summary",
+      "agent": "chatgpt",
+      "kind": "writing_zh",
+      "dependencies": [
+        "review",
+        "writing"
+      ],
+      "prompt": "依据所有已验证成果执行最终综合分析，列出已完成、限制、下一步。",
+      "validation": {
+        "text_contains": [
+          "已完成",
+          "限制",
+          "下一步"
+        ]
+      }
+    }
+  ]
+}

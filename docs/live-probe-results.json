@@ -1,0 +1,28 @@
+{
+  "example": true,
+  "job": "demo-probe",
+  "transport": "file_bridge",
+  "authentication": "sample",
+  "extra_model_api": false,
+  "results": [
+    {
+      "task": "reasoning",
+      "status": "completed",
+      "output": "{\"sum\": 3}",
+      "artifacts": [],
+      "model": {
+        "value": null,
+        "source": "sample",
+        "confidence": "unknown"
+      },
+      "verification": {
+        "passed": true,
+        "checks": {
+          "json_equals": {
+            "sum": 3
+          }
+        }
+      }
+    }
+  ]
+}

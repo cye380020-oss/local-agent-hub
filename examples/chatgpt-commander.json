@@ -1,0 +1,79 @@
+{
+  "title": "ChatGPT 指挥并执行 → Codex 实作 → ChatGPT 审核汇总",
+  "tasks": [
+    {
+      "id": "commander_analysis",
+      "agent": "chatgpt",
+      "kind": "reasoning",
+      "prompt": "你是总指挥，同时必须执行实质分析。为本地多 Agent 系统写出一份短评：现有证据、可立即运行的入口、未知项、验收标准。包含“证据”“入口”“验收”三个词。不要只宣布分工。",
+      "validation": {
+        "text_contains": [
+          "证据",
+          "入口",
+          "验收"
+        ]
+      }
+    },
+    {
+      "id": "implementation",
+      "agent": "codex",
+      "dependencies": [
+        "commander_analysis"
+      ],
+      "kind": "coding",
+      "allowed_tools": [
+        "files_read",
+        "files_write"
+      ],
+      "prompt": "根据 inputs 和任务上下文写一份运行检查清单到 checklist.md，包含“启动”“暂停”“恢复”“验收”。最后仅返回 JSON {\"file\":\"checklist.md\"}。只操作当前工作区。",
+      "validation": {
+        "json_equals": {
+          "file": "checklist.md"
+        },
+        "artifacts": [
+          {
+            "path": "checklist.md",
+            "min_bytes": 40,
+            "text_contains": [
+              "启动",
+              "暂停",
+              "恢复",
+              "验收"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "cross_review",
+      "agent": "chatgpt",
+      "dependencies": [
+        "implementation"
+      ],
+      "review_of": "implementation",
+      "kind": "review",
+      "prompt": "实质审查上一任务的成果与验收证据。若满足要求只返回 JSON {\"decision\":\"accept\",\"reason\":\"具体理由\"}；否则 decision 为 reject 并说明问题。不要假定已通过。",
+      "validation": {
+        "review_accept": true
+      }
+    },
+    {
+      "id": "commander_summary",
+      "agent": "chatgpt",
+      "dependencies": [
+        "commander_analysis",
+        "implementation",
+        "cross_review"
+      ],
+      "kind": "writing_zh",
+      "prompt": "依据全部已验证成果，执行最终中文综合分析，说明“已完成”“限制”“下一步”。只陈述有证据支持的结论。",
+      "validation": {
+        "text_contains": [
+          "已完成",
+          "限制",
+          "下一步"
+        ]
+      }
+    }
+  ]
+}

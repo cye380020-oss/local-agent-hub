@@ -1,0 +1,21 @@
+{
+  "title": "项目交接清单",
+  "tasks": [
+    {
+      "id": "checklist",
+      "kind": "writing_zh",
+      "required_capabilities": [
+        "writing_zh"
+      ],
+      "prompt": "用简体中文写一份项目交接清单，包含目标、成果、验收、风险四项。只返回最终清单。",
+      "validation": {
+        "text_contains": [
+          "目标",
+          "成果",
+          "验收",
+          "风险"
+        ]
+      }
+    }
+  ]
+}
